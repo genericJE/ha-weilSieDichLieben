@@ -41,6 +41,17 @@ const SHADOW_OVERRIDES = `
 .rfm-child {
   line-height: normal;
 }
+
+/* The upstream DepartureTable wrapper has 16px (or 8px on mobile) of horizontal
+   padding meant to gutter the content from the browser viewport. Inside an HA
+   ha-card that's already a double gutter — drop the horizontal padding so the
+   table goes edge-to-edge. The wrapper is identified by its inline border-radius
+   (the only div with border-radius: 8px set inline in this tree). !important is
+   required to beat the inline style. */
+div[style*="border-radius: 8px"] {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 `;
 
 interface Station {
