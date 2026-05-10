@@ -1,6 +1,6 @@
 {
   "name": "ha-weil-sie-dich-lieben-card",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Home Assistant Lovelace card embedding the weilSieDichLieben BVG departure board",
   "scripts": {
@@ -8,14 +8,29 @@
     "watch": "rollup -c --watch"
   },
   "dependencies": {
-    "lit": "^3.2.1"
+    "@ant-design/icons": "^5.5.1",
+    "@r2wc/react-to-web-component": "^2.0.3",
+    "antd": "^5.21.4",
+    "leaflet": "^1.9.4",
+    "lit": "^3.2.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-fast-marquee": "^1.6.5",
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.25.8",
+    "@babel/preset-react": "^7.25.7",
+    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-image": "^3.0.3",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-replace": "^6.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.1",
     "rollup": "^4.24.0",
+    "rollup-plugin-postcss": "^4.0.2",
     "tslib": "^2.8.0",
     "typescript": "^5.6.3"
   }
