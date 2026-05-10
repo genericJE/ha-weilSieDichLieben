@@ -8,11 +8,27 @@ import dotMatrixFont from '../weilSieDichLieben/src/assets/fonts/DotMatrix-repai
 
 export const REACT_ELEMENT = 'weil-sie-dich-lieben-departure-display';
 
-const FONT_CSS = `
-@font-face {
-  font-family: 'DotMatrix';
-  src: url(${dotMatrixFont}) format('truetype');
-  font-display: swap;
+// Register DotMatrix globally on document.fonts. An @font-face declared *inside*
+// a shadow root registers the family for CSS resolution but doesn't reliably make
+// the browser use the binary for glyph rendering — declarations on document.fonts
+// cross shadow boundaries and actually paint the characters.
+let fontRegistered = false;
+function ensureDotMatrixFont() {
+  if (fontRegistered || typeof document === 'undefined') return;
+  fontRegistered = true;
+  const face = new FontFace('DotMatrix', `url(${dotMatrixFont}) format('truetype')`);
+  face.load()
+    .then((loaded) => document.fonts.add(loaded))
+    .catch((err) => console.warn('[weilSieDichLieben] DotMatrix font failed to load:', err));
+}
+
+// Header background is lightGray (set inline by the upstream DepartureTable). HA's dark
+// theme inherits a light text color, leaving the header text invisible. Force a dark
+// color on any antd row whose inline style sets lightGray.
+const SHADOW_OVERRIDES = `
+.ant-row[style*="lightGray" i],
+.ant-row[style*="lightgray" i] {
+  color: #111;
 }
 `;
 
@@ -54,20 +70,16 @@ const normalizeStation = (s: Station, idx: number): Station => ({
   instanceId: idx + 1,
 } as Station & { instanceId: number });
 
-// Mirror <style> elements from document.head into our shadow root, keeping them in sync.
-// React libraries (leaflet's bundled CSS, react-fast-marquee's runtime keyframes, etc.) inject
-// to document.head by default. Without mirroring, those styles never reach the React DOM that
-// lives inside this shadow root, so e.g. the Marquee animation stays stuck.
 function mirrorDocumentStyles(container: ShadowRoot): () => void {
   const cloneByOrigin = new WeakMap<HTMLStyleElement, HTMLStyleElement>();
 
   const isAntdStyle = (el: HTMLStyleElement) => el.hasAttribute('data-rc-order');
-  const isOurFontStyle = (el: HTMLStyleElement) => el.hasAttribute('data-weil-font');
+  const isOurOverride = (el: HTMLStyleElement) => el.hasAttribute('data-weil-overrides');
 
   const sync = () => {
     for (const src of document.head.querySelectorAll('style')) {
       const styleEl = src as HTMLStyleElement;
-      if (isAntdStyle(styleEl) || isOurFontStyle(styleEl)) continue;
+      if (isAntdStyle(styleEl) || isOurOverride(styleEl)) continue;
       let clone = cloneByOrigin.get(styleEl);
       if (!clone) {
         clone = document.createElement('style');
@@ -96,13 +108,14 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
   const [container, setContainer] = useState<ShadowRoot | null>(null);
 
   useEffect(() => {
+    ensureDotMatrixFont();
     if (container || !probeRef.current) return;
     const root = probeRef.current.getRootNode();
     if (root instanceof ShadowRoot) {
-      if (!root.querySelector('style[data-weil-font]')) {
+      if (!root.querySelector('style[data-weil-overrides]')) {
         const style = document.createElement('style');
-        style.setAttribute('data-weil-font', '');
-        style.textContent = FONT_CSS;
+        style.setAttribute('data-weil-overrides', '');
+        style.textContent = SHADOW_OVERRIDES;
         root.appendChild(style);
       }
       setContainer(root);
