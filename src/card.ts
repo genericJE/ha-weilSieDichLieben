@@ -43,7 +43,8 @@ export class WeilSieDichLiebenCard extends LitElement {
     // Stub config used by the dashboard "Add card" picker to render a live
     // preview, and as the initial config when a user adds the card. Defaults
     // to S+U Alexanderplatz so the picker shows real BVG data instead of an
-    // empty placeholder; users can change this via the visual editor.
+    // empty placeholder; users can change this via the visual editor. Tuned
+    // for the picker thumbnail (smaller font, fewer rows so they all fit).
     return {
       type: 'custom:weil-sie-dich-lieben-card',
       stations: [
@@ -55,9 +56,10 @@ export class WeilSieDichLiebenCard extends LitElement {
           tram: true,
           bus: true,
           when: 0,
-          results: 6,
+          results: 4,
         },
       ],
+      fontSize: 12,
     };
   }
 
