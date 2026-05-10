@@ -15,6 +15,8 @@ interface CustomCardEntry {
   type: string;
   name: string;
   description: string;
+  preview?: boolean;
+  documentationURL?: string;
 }
 
 const w = window as unknown as { customCards?: CustomCardEntry[] };
@@ -23,6 +25,8 @@ w.customCards.push({
   type: 'weil-sie-dich-lieben-card',
   name: 'weilSieDichLieben',
   description: 'BVG departure board for Home Assistant',
+  preview: true,
+  documentationURL: 'https://github.com/genericJE/ha-weilSieDichLieben',
 });
 
 @customElement('weil-sie-dich-lieben-card')
@@ -36,7 +40,25 @@ export class WeilSieDichLiebenCard extends LitElement {
   }
 
   public static getStubConfig(): CardConfig {
-    return { type: 'custom:weil-sie-dich-lieben-card', stations: [] };
+    // Stub config used by the dashboard "Add card" picker to render a live
+    // preview, and as the initial config when a user adds the card. Defaults
+    // to S+U Alexanderplatz so the picker shows real BVG data instead of an
+    // empty placeholder; users can change this via the visual editor.
+    return {
+      type: 'custom:weil-sie-dich-lieben-card',
+      stations: [
+        {
+          id: '900100003',
+          value: 'S+U Alexanderplatz',
+          suburban: true,
+          subway: true,
+          tram: true,
+          bus: true,
+          when: 0,
+          results: 6,
+        },
+      ],
+    };
   }
 
   public setConfig(config: CardConfig): void {
