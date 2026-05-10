@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="images/logo.png" alt="weilSieDichLieben" width="160" />
+</p>
+
 # weilSieDichLieben Card
 
 A Home Assistant Lovelace card that displays a BVG (Berlin public transport) departure board, powered by the [weilSieDichLieben](https://github.com/genericJE/weilSieDichLieben) project.

@@ -1,10 +1,10 @@
+<p align="center">
+  <img src="images/logo.png" alt="weilSieDichLieben" width="160" />
+</p>
+
 # ha-weilSieDichLieben
 
 A Home Assistant Lovelace card that embeds the [weilSieDichLieben](https://github.com/genericJE/weilSieDichLieben) BVG departure board, distributed via [HACS](https://hacs.xyz/).
-
-## Status
-
-Early scaffold. The LitElement shell, build tooling, and HACS manifest are in place; the React bridge that mounts the upstream `DepartureDisplay` component is not yet wired up.
 
 ## Architecture
 
