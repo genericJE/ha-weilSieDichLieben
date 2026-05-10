@@ -25,14 +25,10 @@ export default {
         'process.env.NODE_ENV': JSON.stringify('production'),
       },
     }),
+    typescript({ tsconfig: './tsconfig.json' }),
     json(),
     image(),
     postcss({ extensions: ['.css'], inject: true, minimize: isProd }),
-    resolve({
-      browser: true,
-      extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
-    }),
-    commonjs(),
     babel({
       babelHelpers: 'bundled',
       extensions: ['.js', '.jsx'],
@@ -42,7 +38,11 @@ export default {
         ['@babel/preset-react', { runtime: 'automatic' }],
       ],
     }),
-    typescript({ tsconfig: './tsconfig.json' }),
+    resolve({
+      browser: true,
+      extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
+    }),
+    commonjs({ include: ['node_modules/**', 'weilSieDichLieben/**'] }),
     isProd && terser(),
   ].filter(Boolean),
 };

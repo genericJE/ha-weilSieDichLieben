@@ -13,8 +13,6 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "allowJs": true,
-    "checkJs": false,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "outDir": "./dist",
     "declaration": false,

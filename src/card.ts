@@ -1,8 +1,10 @@
-import { LitElement, html, css, type TemplateResult } from 'lit';
+import { LitElement, html, css } from 'lit';
+import type { TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import './react-bridge';
 import type { CardConfig } from './types';
 
-const CARD_VERSION = '0.1.0';
+const CARD_VERSION = '0.2.0';
 
 console.info(
   `%c WEIL-SIE-DICH-LIEBEN-CARD %c v${CARD_VERSION} `,
@@ -50,18 +52,29 @@ export class WeilSieDichLiebenCard extends LitElement {
   }
 
   protected render(): TemplateResult {
-    if (!this._config) {
-      return html``;
+    if (!this._config) return html``;
+
+    const stations = this._config.stations ?? [];
+    if (stations.length === 0) {
+      return html`
+        <ha-card>
+          <div class="empty">
+            No stations configured. Add a <code>stations</code> list to the card config.
+          </div>
+        </ha-card>
+      `;
     }
-    const stationCount = this._config.stations?.length ?? 0;
+
     return html`
       <ha-card>
-        <div class="placeholder">
-          <div class="title">weilSieDichLieben</div>
-          <div class="hint">
-            Bridge not yet wired. ${stationCount} station${stationCount === 1 ? '' : 's'} configured.
-          </div>
-        </div>
+        <weil-sie-dich-lieben-departure-display
+          .selectedStations=${stations}
+          .fontSize=${this._config.fontSize ?? 16}
+          .language=${this._config.language ?? 'de'}
+          .remarksVisibility=${this._config.remarksVisibility ?? true}
+          .standardRemarksVisibility=${this._config.standardRemarksVisibility ?? true}
+          .hideDepartureCol=${this._config.hideDepartureCol ?? false}
+        ></weil-sie-dich-lieben-departure-display>
       </ha-card>
     `;
   }
@@ -70,18 +83,20 @@ export class WeilSieDichLiebenCard extends LitElement {
     :host {
       display: block;
     }
-    .placeholder {
+    .empty {
       padding: 24px;
       text-align: center;
       color: var(--secondary-text-color);
     }
-    .title {
-      font-size: 1.2em;
-      color: var(--primary-text-color);
-      margin-bottom: 8px;
+    code {
+      background: var(--code-editor-background-color, rgba(255, 255, 255, 0.05));
+      padding: 0 4px;
+      border-radius: 3px;
     }
-    .hint {
-      font-size: 0.9em;
+    weil-sie-dich-lieben-departure-display {
+      display: block;
+      background: black;
+      min-height: 200px;
     }
   `;
 }
