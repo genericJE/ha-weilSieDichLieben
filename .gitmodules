@@ -1,0 +1,3 @@
+[submodule "weilSieDichLieben"]
+	path = weilSieDichLieben
+	url = git@github-personal:genericJE/weilSieDichLieben.git
