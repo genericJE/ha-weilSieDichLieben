@@ -101,6 +101,11 @@ var e,t,n="function"==typeof Symbol?Symbol:{},i=n.iterator||"@@iterator",r=n.toS
       display: block;
       background: black;
       min-height: 200px;
+      /* Match ha-card's rounded corners so the black background follows the
+         card outline in masonry/sections views. In panel mode HA sets the
+         variable to 0, so the card stays edge-to-edge. */
+      border-radius: var(--ha-card-border-radius, 12px);
+      overflow: hidden;
     }
   `,t([pe({attribute:!1})],tg.prototype,"hass",void 0),t([me()],tg.prototype,"_config",void 0),tg=t([he("weil-sie-dich-lieben-card")],tg);let ng=class extends ce{constructor(){super(...arguments),this._searchQuery="",this._searchResults=[],this._searchPending=!1}setConfig(e){this._config=e}_emit(e){this._config=e,this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:e},bubbles:!0,composed:!0}))}_addStation(e){if(!this._config)return;const t={id:e.id,value:e.name,suburban:!0,subway:!0,tram:!0,bus:!0,ferry:!1,express:!1,regional:!1,when:0,results:6},n=[...this._config.stations??[],t];this._emit({...this._config,stations:n}),this._searchQuery="",this._searchResults=[]}_removeStation(e){if(!this._config)return;const t=(this._config.stations??[]).filter((t,n)=>n!==e);this._emit({...this._config,stations:t})}_updateStation(e,t,n){if(!this._config)return;const i=(this._config.stations??[]).map((i,r)=>r===e?{...i,[t]:n}:i);this._emit({...this._config,stations:i})}_updateGlobal(e,t){this._config&&this._emit({...this._config,[e]:t})}_onSearchInput(e){const t=e.target.value;this._searchQuery=t,this._searchTimer&&clearTimeout(this._searchTimer),t.trim()?(this._searchPending=!0,this._searchTimer=window.setTimeout(()=>this._fetchStations(t),300)):this._searchResults=[]}async _fetchStations(e){try{const t=`https://v6.bvg.transport.rest/locations?query=${encodeURIComponent(e)}&results=10&stops=true&addresses=false&poi=false`,n=await fetch(t);if(!n.ok)return;const i=await n.json();if(this._searchQuery!==e)return;this._searchResults=(i??[]).filter(e=>"stop"===e.type)}catch(e){console.error("[weilSieDichLieben editor] BVG search failed:",e)}finally{this._searchPending=!1}}render(){if(!this._config)return D``;const e=this._config.stations??[];return D`
       <div class="root">

@@ -8,6 +8,8 @@ If anything here ends up being useful to you and you feel like saying thanks, my
 
 A Home Assistant Lovelace card that embeds the [weilSieDichLieben](https://github.com/genericJE/weilSieDichLieben) BVG departure board, distributed via [HACS](https://hacs.xyz/).
 
+![Preview of the BVG departure board card showing live departures from Alexanderplatz](images/preview.png)
+
 ## Architecture
 
 The card is a [LitElement](https://lit.dev/) custom element that mounts the upstream React components as a web component via [`@r2wc/react-to-web-component`](https://github.com/bitovi/react-to-web-component). The upstream React source lives in this repo as a git submodule at [`weilSieDichLieben/`](weilSieDichLieben/) and is consumed at build time by Rollup.

@@ -6,6 +6,8 @@
 
 A Home Assistant Lovelace card that displays a BVG (Berlin public transport) departure board, powered by the [weilSieDichLieben](https://github.com/genericJE/weilSieDichLieben) project.
 
+![Preview](images/preview.png)
+
 ## Configuration
 
 ```yaml

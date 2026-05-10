@@ -96,6 +96,11 @@ export class WeilSieDichLiebenCard extends LitElement {
       display: block;
       background: black;
       min-height: 200px;
+      /* Match ha-card's rounded corners so the black background follows the
+         card outline in masonry/sections views. In panel mode HA sets the
+         variable to 0, so the card stays edge-to-edge. */
+      border-radius: var(--ha-card-border-radius, 12px);
+      overflow: hidden;
     }
   `;
 }
