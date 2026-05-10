@@ -116,6 +116,7 @@ function mirrorDocumentStyles(container: ShadowRoot): () => void {
 
 const DepartureDisplayWrapper = (props: BridgeProps) => {
   const probeRef = useRef<HTMLDivElement>(null);
+  const portalRef = useRef<HTMLDivElement>(null);
   const [container, setContainer] = useState<ShadowRoot | null>(null);
 
   useEffect(() => {
@@ -142,14 +143,18 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
     ? props.selectedStations.map(normalizeStation)
     : [];
 
+  // The popover trigger lives inside an antd Col with overflow: hidden (the upstream
+  // uses that for ellipsis truncation of long station names). Portaling antd popups
+  // into triggerNode.parentElement clips the 520px-wide RadarMap to column width.
+  // Dedicated portal host at the top of the shadow tree, outside the column, avoids
+  // the clip while keeping the popup inside the shadow scope so antd's StyleProvider
+  // styles still apply.
   return (
     <div ref={probeRef}>
       {container && (
         <StyleProvider container={container} hashPriority="high">
           <ConfigProvider
-            getPopupContainer={(triggerNode) =>
-              (triggerNode?.parentElement as HTMLElement | null) ?? document.body
-            }
+            getPopupContainer={() => portalRef.current ?? document.body}
           >
             <DepartureDisplay
               selectedStations={stations}
@@ -162,6 +167,7 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
           </ConfigProvider>
         </StyleProvider>
       )}
+      <div ref={portalRef} data-weil-popup-host></div>
     </div>
   );
 };
