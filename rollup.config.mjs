@@ -7,6 +7,7 @@ import replace from '@rollup/plugin-replace';
 import postcss from 'rollup-plugin-postcss';
 import image from '@rollup/plugin-image';
 import json from '@rollup/plugin-json';
+import url from '@rollup/plugin-url';
 
 const isProd = !process.env.ROLLUP_WATCH;
 
@@ -28,6 +29,10 @@ export default {
     typescript({ tsconfig: './tsconfig.json' }),
     json(),
     image(),
+    url({
+      include: ['**/*.ttf', '**/*.woff', '**/*.woff2'],
+      limit: 200 * 1024,
+    }),
     postcss({ extensions: ['.css'], inject: true, minimize: isProd }),
     babel({
       babelHelpers: 'bundled',

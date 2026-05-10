@@ -8,6 +8,11 @@ declare module '*.svg' {
   export default src;
 }
 
+declare module '*.ttf' {
+  const src: string;
+  export default src;
+}
+
 declare module '*.css';
 
 declare module '../weilSieDichLieben/src/Components/DepartureDisplay' {

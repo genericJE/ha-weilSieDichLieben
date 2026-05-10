@@ -1,5 +1,4 @@
-import { LitElement, html, css } from 'lit';
-import type { TemplateResult } from 'lit';
+import { LitElement, html, css, type TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import './react-bridge';
 import type { CardConfig } from './types';

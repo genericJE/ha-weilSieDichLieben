@@ -1,8 +1,20 @@
+import { useEffect, useRef, useState } from 'react';
 import r2wc from '@r2wc/react-to-web-component';
+import { StyleProvider } from '@ant-design/cssinjs';
+import { ConfigProvider } from 'antd';
 import 'leaflet/dist/leaflet.css';
 import DepartureDisplay from '../weilSieDichLieben/src/Components/DepartureDisplay';
+import dotMatrixFont from '../weilSieDichLieben/src/assets/fonts/DotMatrix-repaired.ttf';
 
 export const REACT_ELEMENT = 'weil-sie-dich-lieben-departure-display';
+
+const FONT_CSS = `
+@font-face {
+  font-family: 'DotMatrix';
+  src: url(${dotMatrixFont}) format('truetype');
+  font-display: swap;
+}
+`;
 
 interface Station {
   id: string;
@@ -43,18 +55,48 @@ const normalizeStation = (s: Station, idx: number): Station => ({
 } as Station & { instanceId: number });
 
 const DepartureDisplayWrapper = (props: BridgeProps) => {
+  const probeRef = useRef<HTMLDivElement>(null);
+  const [container, setContainer] = useState<ShadowRoot | null>(null);
+
+  useEffect(() => {
+    if (container || !probeRef.current) return;
+    const root = probeRef.current.getRootNode();
+    if (root instanceof ShadowRoot) {
+      if (!root.querySelector('style[data-weil-font]')) {
+        const style = document.createElement('style');
+        style.setAttribute('data-weil-font', '');
+        style.textContent = FONT_CSS;
+        root.appendChild(style);
+      }
+      setContainer(root);
+    }
+  });
+
   const stations = Array.isArray(props.selectedStations)
     ? props.selectedStations.map(normalizeStation)
     : [];
+
   return (
-    <DepartureDisplay
-      selectedStations={stations}
-      fontSize={props.fontSize ?? 16}
-      language={props.language ?? 'de'}
-      remarksVisibility={props.remarksVisibility ?? true}
-      standardRemarksVisibility={props.standardRemarksVisibility ?? true}
-      hideDepartureCol={props.hideDepartureCol ?? false}
-    />
+    <div ref={probeRef}>
+      {container && (
+        <StyleProvider container={container} hashPriority="high">
+          <ConfigProvider
+            getPopupContainer={(triggerNode) =>
+              (triggerNode?.parentElement as HTMLElement | null) ?? document.body
+            }
+          >
+            <DepartureDisplay
+              selectedStations={stations}
+              fontSize={props.fontSize ?? 16}
+              language={props.language ?? 'de'}
+              remarksVisibility={props.remarksVisibility ?? true}
+              standardRemarksVisibility={props.standardRemarksVisibility ?? true}
+              hideDepartureCol={props.hideDepartureCol ?? false}
+            />
+          </ConfigProvider>
+        </StyleProvider>
+      )}
+    </div>
   );
 };
 
@@ -68,6 +110,7 @@ if (!customElements.get(REACT_ELEMENT)) {
       standardRemarksVisibility: 'boolean',
       hideDepartureCol: 'boolean',
     },
+    shadow: 'open',
   });
   customElements.define(REACT_ELEMENT, Wrapped);
 }
