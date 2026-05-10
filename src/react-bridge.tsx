@@ -52,6 +52,15 @@ div[style*="border-radius: 8px"] {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+
+/* When the card has rounded corners (non-panel views), the header bar's right
+   edge curves inward and the "Abfahrt in" column risks being clipped. Scale a
+   touch of extra right padding with --ha-card-border-radius — 0 in panel mode
+   so it stays untouched, ~6px more in non-panel where the radius is 12. */
+.ant-row[style*="lightGray" i],
+.ant-row[style*="lightgray" i] {
+  padding-right: calc(8px + var(--ha-card-border-radius, 0px) / 2);
+}
 `;
 
 interface Station {
