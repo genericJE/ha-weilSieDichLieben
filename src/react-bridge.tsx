@@ -54,6 +54,43 @@ const normalizeStation = (s: Station, idx: number): Station => ({
   instanceId: idx + 1,
 } as Station & { instanceId: number });
 
+// Mirror <style> elements from document.head into our shadow root, keeping them in sync.
+// React libraries (leaflet's bundled CSS, react-fast-marquee's runtime keyframes, etc.) inject
+// to document.head by default. Without mirroring, those styles never reach the React DOM that
+// lives inside this shadow root, so e.g. the Marquee animation stays stuck.
+function mirrorDocumentStyles(container: ShadowRoot): () => void {
+  const cloneByOrigin = new WeakMap<HTMLStyleElement, HTMLStyleElement>();
+
+  const isAntdStyle = (el: HTMLStyleElement) => el.hasAttribute('data-rc-order');
+  const isOurFontStyle = (el: HTMLStyleElement) => el.hasAttribute('data-weil-font');
+
+  const sync = () => {
+    for (const src of document.head.querySelectorAll('style')) {
+      const styleEl = src as HTMLStyleElement;
+      if (isAntdStyle(styleEl) || isOurFontStyle(styleEl)) continue;
+      let clone = cloneByOrigin.get(styleEl);
+      if (!clone) {
+        clone = document.createElement('style');
+        clone.setAttribute('data-mirror-from', 'document.head');
+        container.appendChild(clone);
+        cloneByOrigin.set(styleEl, clone);
+      }
+      if (clone.textContent !== styleEl.textContent) {
+        clone.textContent = styleEl.textContent;
+      }
+    }
+  };
+
+  sync();
+  const observer = new MutationObserver(sync);
+  observer.observe(document.head, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  });
+  return () => observer.disconnect();
+}
+
 const DepartureDisplayWrapper = (props: BridgeProps) => {
   const probeRef = useRef<HTMLDivElement>(null);
   const [container, setContainer] = useState<ShadowRoot | null>(null);
@@ -71,6 +108,11 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
       setContainer(root);
     }
   });
+
+  useEffect(() => {
+    if (!container) return;
+    return mirrorDocumentStyles(container);
+  }, [container]);
 
   const stations = Array.isArray(props.selectedStations)
     ? props.selectedStations.map(normalizeStation)
