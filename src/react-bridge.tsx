@@ -30,6 +30,17 @@ const SHADOW_OVERRIDES = `
 .ant-row[style*="lightgray" i] {
   color: #111;
 }
+
+/* HA's theme cascades line-height ~1.6 into the shadow tree, padding rows by
+   ~10px each and marquees by ~7px. The upstream relies on the browser default
+   ('normal') for tight DotMatrix rows. */
+.ant-row,
+.rfm-marquee-container,
+.rfm-marquee,
+.rfm-initial-child-container,
+.rfm-child {
+  line-height: normal;
+}
 `;
 
 interface Station {
