@@ -52,15 +52,6 @@ div[style*="border-radius: 8px"] {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
-
-/* When the card has rounded corners (non-panel views), pull the lightGray
-   header bar inward on the right so it doesn't run into the corner curve.
-   Scales with --ha-card-border-radius — 0 in panel mode (untouched),
-   ~6px in non-panel where the radius is 12. */
-.ant-row[style*="lightGray" i],
-.ant-row[style*="lightgray" i] {
-  margin-right: calc(var(--ha-card-border-radius, 0px) / 2);
-}
 `;
 
 interface Station {
