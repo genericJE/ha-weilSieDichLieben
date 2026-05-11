@@ -1,6 +1,6 @@
 {
   "name": "ha-weil-sie-dich-lieben-card",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Home Assistant Lovelace card embedding the weilSieDichLieben BVG departure board",
   "scripts": {

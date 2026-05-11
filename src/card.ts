@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import './react-bridge';
 import type { CardConfig } from './types';
 
-const CARD_VERSION = '1.0.0';
+const CARD_VERSION = '1.0.1';
 
 console.info(
   `%c WEIL-SIE-DICH-LIEBEN-CARD %c v${CARD_VERSION} `,
