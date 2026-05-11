@@ -20,7 +20,8 @@ ha-weilSieDichLieben/
 ├── info.md                            # shown in the HACS UI
 ├── src/
 │   ├── card.ts                        # <weil-sie-dich-lieben-card> (LitElement shell)
-│   ├── editor.ts                      # Lovelace config editor (stub)
+│   ├── react-bridge.tsx               # mounts the React DepartureDisplay via r2wc
+│   ├── editor.ts                      # visual config editor (Lit)
 │   └── types.ts                       # CardConfig + Station schema
 ├── dist/
 │   └── weil-sie-dich-lieben-card.js   # built artifact, committed for HACS
@@ -30,7 +31,7 @@ ha-weilSieDichLieben/
 ## Development
 
 ```bash
-git clone --recurse-submodules git@github-personal:genericJE/ha-weilSieDichLieben.git
+git clone --recurse-submodules https://github.com/genericJE/ha-weilSieDichLieben.git
 cd ha-weilSieDichLieben
 npm install
 npm run build         # one-shot build → dist/
@@ -43,18 +44,20 @@ If you forgot `--recurse-submodules` on clone:
 git submodule update --init --recursive
 ```
 
-## Installation (for end users)
+## Installation
 
-This repo is not yet published to HACS default. To install via custom repository:
+Via [HACS](https://hacs.xyz/):
 
-1. In Home Assistant, open HACS → Frontend → ⋯ → Custom repositories
-2. Add `https://github.com/genericJE/ha-weilSieDichLieben` as type `Lovelace`
+1. HACS → Frontend → ⋯ → **Custom repositories**
+2. Add `https://github.com/genericJE/ha-weilSieDichLieben` as type **Lovelace**
 3. Install **weilSieDichLieben Card**
-4. Add a card to a dashboard with `type: custom:weil-sie-dich-lieben-card`
+4. Add the card to a dashboard — the visual editor lets you search for BVG stations and toggle transport modes
+
+For kiosk-style fullscreen rendering, set the view to `panel: true`.
 
 ## Configuration
 
-Each station in the `stations` array follows the upstream schema:
+Use the visual editor (Card edit → Show visual editor) for stations and global settings, or edit YAML directly. Each station follows the upstream schema:
 
 ```yaml
 type: custom:weil-sie-dich-lieben-card
