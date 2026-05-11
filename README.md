@@ -4,8 +4,6 @@
 
 # ha-weilSieDichLieben
 
-If anything here ends up being useful to you and you feel like saying thanks, my PayPal is https://paypal.me/genericJE. Truly no expectation either way, just leaving the option here in case.
-
 A Home Assistant Lovelace card that embeds the [weilSieDichLieben](https://github.com/genericJE/weilSieDichLieben) BVG departure board, distributed via [HACS](https://hacs.xyz/).
 
 ![Preview of the BVG departure board card showing live departures from Alexanderplatz](images/preview.png)
@@ -78,3 +76,5 @@ stations:
 ## License
 
 MIT — see [LICENSE](LICENSE). Derived from [weilSieDichLieben](https://github.com/NikBLN/weilSieDichLieben) by Nikolas Tsombanis.
+
+If anything here ends up being useful to you and you feel like saying thanks, my PayPal is https://paypal.me/genericJE. Truly no expectation either way, just leaving the option here in case.
