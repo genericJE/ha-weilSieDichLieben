@@ -118,6 +118,7 @@ export class WeilSieDichLiebenEditor extends LitElement {
             ${this._renderToggle('Show remarks', 'remarksVisibility', true)}
             ${this._renderToggle('Show standard remarks', 'standardRemarksVisibility', true)}
             ${this._renderToggle('Hide "Abfahrt von" column', 'hideDepartureCol', false)}
+            ${this._renderToggle('Hide vehicle radar', 'hideRadar', false)}
             ${this._renderNumber('Font size (px)', 'fontSize', 16, 8, 48, 1)}
             ${this._renderSelect('Language', 'language', 'de', [
               { value: 'de', label: 'Deutsch' },

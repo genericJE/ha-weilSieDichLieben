@@ -22,4 +22,5 @@ export interface CardConfig {
   standardRemarksVisibility?: boolean;
   autoHide?: boolean;
   hideDepartureCol?: boolean;
+  hideRadar?: boolean;
 }

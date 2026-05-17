@@ -76,6 +76,7 @@ interface BridgeProps {
   remarksVisibility?: boolean;
   standardRemarksVisibility?: boolean;
   hideDepartureCol?: boolean;
+  hideRadar?: boolean;
 }
 
 const normalizeStation = (s: Station, idx: number): Station => ({
@@ -174,6 +175,7 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
               remarksVisibility={props.remarksVisibility ?? true}
               standardRemarksVisibility={props.standardRemarksVisibility ?? true}
               hideDepartureCol={props.hideDepartureCol ?? false}
+              hideRadar={props.hideRadar ?? false}
             />
           </ConfigProvider>
         </StyleProvider>
@@ -192,6 +194,7 @@ if (!customElements.get(REACT_ELEMENT)) {
       remarksVisibility: 'boolean',
       standardRemarksVisibility: 'boolean',
       hideDepartureCol: 'boolean',
+      hideRadar: 'boolean',
     },
     shadow: 'open',
   });
