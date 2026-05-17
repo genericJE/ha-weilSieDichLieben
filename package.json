@@ -1,6 +1,6 @@
 {
   "name": "ha-weil-sie-dich-lieben-card",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "Home Assistant dashboard card embedding the weilSieDichLieben BVG departure board",
   "scripts": {
