@@ -4,7 +4,7 @@
 
 # ha-weilSieDichLieben
 
-A Home Assistant Lovelace card that embeds the [weilSieDichLieben](https://github.com/genericJE/weilSieDichLieben) BVG departure board, distributed via [HACS](https://hacs.xyz/).
+A Home Assistant dashboard card that embeds the [weilSieDichLieben](https://github.com/genericJE/weilSieDichLieben) BVG departure board, distributed via [HACS](https://hacs.xyz/).
 
 ![Preview of the BVG departure board card showing live departures from Alexanderplatz](images/preview.png)
 
@@ -14,7 +14,7 @@ The card is a [LitElement](https://lit.dev/) custom element that mounts the upst
 
 ```
 ha-weilSieDichLieben/
-├── hacs.json                          # HACS plugin manifest
+├── hacs.json                          # HACS manifest
 ├── info.md                            # shown in the HACS UI
 ├── src/
 │   ├── card.ts                        # <weil-sie-dich-lieben-card> (LitElement shell)
@@ -46,8 +46,8 @@ git submodule update --init --recursive
 
 Via [HACS](https://hacs.xyz/):
 
-1. HACS → Frontend → ⋯ → **Custom repositories**
-2. Add `https://github.com/genericJE/ha-weilSieDichLieben` as type **Lovelace**
+1. HACS → ⋯ → **Custom repositories**
+2. Add `https://github.com/genericJE/ha-weilSieDichLieben` as type **Dashboard**
 3. Install **weilSieDichLieben Card**
 4. Add the card to a dashboard — the visual editor lets you search for BVG stations and toggle transport modes
 

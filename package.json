@@ -1,8 +1,8 @@
 {
   "name": "ha-weil-sie-dich-lieben-card",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
-  "description": "Home Assistant Lovelace card embedding the weilSieDichLieben BVG departure board",
+  "description": "Home Assistant dashboard card embedding the weilSieDichLieben BVG departure board",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c --watch"
