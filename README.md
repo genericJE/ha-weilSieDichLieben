@@ -44,12 +44,15 @@ git submodule update --init --recursive
 
 ## Installation
 
-Via [HACS](https://hacs.xyz/):
+This card is in the [HACS](https://hacs.xyz/) default store — no custom repository needed:
 
-1. HACS → ⋯ → **Custom repositories**
-2. Add `https://github.com/genericJE/ha-weilSieDichLieben` as type **Dashboard**
-3. Install **weilSieDichLieben Card**
-4. Add the card to a dashboard — the visual editor lets you search for BVG stations and toggle transport modes
+1. Open HACS and search for **weilSieDichLieben Card**
+2. Download it, then reload your browser when prompted
+3. Add the card to a dashboard — the visual editor lets you search for BVG stations and toggle transport modes
+
+Or jump straight to it:
+
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=genericJE&repository=ha-weilSieDichLieben&category=plugin)
 
 For kiosk-style fullscreen rendering, set the view to `panel: true`.
 
