@@ -287,7 +287,7 @@ export class WeilSieDichLiebenEditor extends LitElement {
       display: block;
       padding: 12px;
       color: var(--primary-text-color);
-      font-family: var(--ha-font-family, var(--paper-font-body1_-_font-family));
+      font-family: var(--ha-font-family-body, Roboto, sans-serif);
     }
     section {
       margin-bottom: 20px;
@@ -415,7 +415,7 @@ export class WeilSieDichLiebenEditor extends LitElement {
     .results .id {
       color: var(--secondary-text-color);
       font-size: 0.8em;
-      font-family: var(--code-font-family, monospace);
+      font-family: var(--ha-font-family-code, monospace);
     }
     .globals {
       display: flex;

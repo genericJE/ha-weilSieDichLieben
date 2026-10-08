@@ -113,7 +113,7 @@ export class WeilSieDichLiebenCard extends LitElement {
       color: var(--secondary-text-color);
     }
     code {
-      background: var(--code-editor-background-color, rgba(255, 255, 255, 0.05));
+      background: var(--secondary-background-color, rgba(127, 127, 127, 0.1));
       padding: 0 4px;
       border-radius: 3px;
     }
@@ -121,10 +121,11 @@ export class WeilSieDichLiebenCard extends LitElement {
       display: block;
       background: black;
       min-height: 200px;
-      /* Match ha-card's rounded corners so the black background follows the
-         card outline in masonry/sections views. In panel mode HA sets the
-         variable to 0, so the card stays edge-to-edge. */
-      border-radius: var(--ha-card-border-radius, 12px);
+      /* Same lookup ha-card does for its own corners, so the black background
+         follows the card outline in masonry/sections views and tracks themes
+         that change the radius token. In panel mode HA sets
+         --ha-card-border-radius to 0, so the card stays edge-to-edge. */
+      border-radius: var(--ha-card-border-radius, var(--ha-border-radius-lg, 12px));
       overflow: hidden;
     }
   `;
