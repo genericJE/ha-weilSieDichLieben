@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import r2wc from '@r2wc/react-to-web-component';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { ConfigProvider } from 'antd';
 import leafletCss from 'leaflet/dist/leaflet.css';
 import marqueeCss from 'virtual:react-fast-marquee-css';
 import DepartureDisplay from '../weilSieDichLieben/src/Components/DepartureDisplay';
+import { MOBILE_BREAKPOINT } from '../weilSieDichLieben/src/hooks/useIsMobile';
 import dotMatrixFont from '../weilSieDichLieben/src/assets/fonts/DotMatrix-repaired.ttf';
 
 export const REACT_ELEMENT = 'weil-sie-dich-lieben-departure-display';
@@ -113,6 +114,7 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
   const probeRef = useRef<HTMLDivElement>(null);
   const portalRef = useRef<HTMLDivElement>(null);
   const [container, setContainer] = useState<ShadowRoot | null>(null);
+  const [narrow, setNarrow] = useState<boolean>();
 
   useEffect(() => {
     ensureDotMatrixFont();
@@ -124,6 +126,21 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
     }
   });
 
+  // The upstream picks its phone layout from the viewport width, but a card is
+  // usually a fraction of the viewport (half a section, a picker thumbnail).
+  // Decide from the card's own width instead, against the same breakpoint, so a
+  // narrow card gets the compact layout on a wide screen too. Measured before
+  // paint so the first visible render already has the right layout.
+  useLayoutEffect(() => {
+    const el = probeRef.current;
+    if (!el) return;
+    const measure = () => setNarrow(el.getBoundingClientRect().width < MOBILE_BREAKPOINT);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const stations = Array.isArray(props.selectedStations)
     ? props.selectedStations.map(normalizeStation)
     : [];
@@ -133,7 +150,8 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
   // into triggerNode.parentElement clips the 520px-wide RadarMap to column width.
   // Dedicated portal host at the top of the shadow tree, outside the column, avoids
   // the clip while keeping the popup inside the shadow scope so antd's StyleProvider
-  // styles still apply.
+  // styles still apply. antd's Modal (the compact layout's radar) uses the same
+  // container, so it stays inside the shadow scope as well.
   return (
     <div ref={probeRef}>
       {container && (
@@ -149,6 +167,7 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
               standardRemarksVisibility={props.standardRemarksVisibility ?? true}
               hideDepartureCol={props.hideDepartureCol ?? false}
               hideRadar={props.hideRadar ?? false}
+              isMobile={narrow}
             />
           </ConfigProvider>
         </StyleProvider>
