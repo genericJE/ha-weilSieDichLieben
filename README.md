@@ -20,6 +20,7 @@ ha-weilSieDichLieben/
 │   ├── card.ts                        # <weil-sie-dich-lieben-card> (LitElement shell)
 │   ├── react-bridge.tsx               # mounts the React DepartureDisplay via r2wc
 │   ├── editor.ts                      # visual config editor (Lit)
+│   ├── map-tiles.ts                   # token for HA's map tile proxy (2026.10+)
 │   └── types.ts                       # CardConfig + Station schema
 ├── dist/
 │   └── weil-sie-dich-lieben-card.js   # built artifact, committed for HACS
@@ -33,6 +34,7 @@ git clone --recurse-submodules https://github.com/genericJE/ha-weilSieDichLieben
 cd ha-weilSieDichLieben
 npm install
 npm run build         # one-shot build → dist/
+npm run typecheck     # tsc over src/, following imports into the submodule
 npm run watch         # rebuild on change
 ```
 
@@ -75,6 +77,30 @@ stations:
     when: 0                   # min minutes until departure
     results: 6                # number of departures to show
 ```
+
+Global options, all optional:
+
+| Option | Default | Effect |
+|---|---|---|
+| `fontSize` | `16` | Font size in px |
+| `language` | `de` | `de` or `en` |
+| `remarksVisibility` | `true` | Show remarks as scrolling rows under a departure |
+| `standardRemarksVisibility` | `true` | Ask the BVG API for its standard remarks too |
+| `hideDepartureCol` | `false` | Hide the "Abfahrt von" column |
+| `hideRadar` | `false` | Hide the vehicle radar icons and popups |
+
+### Layout
+
+The card switches to the upstream's compact layout whenever it is narrower
+than 576 px, whatever the screen size, so it also works in half a section.
+
+### Map tiles
+
+On Home Assistant 2026.10 and newer the vehicle radar loads its map tiles
+through the instance's own tile proxy (the `map_tiles` integration the
+built-in map uses), so OpenStreetMap sees Home Assistant's User-Agent instead
+of your installation's address. Older versions fetch the tiles from
+`tile.openstreetmap.org` directly.
 
 ## License
 
