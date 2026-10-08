@@ -1,7 +1,7 @@
 import { LitElement, html, css, type TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import './react-bridge';
-import type { CardConfig } from './types';
+import type { CardConfig, GridOptions } from './types';
 
 const CARD_VERSION = '1.0.4';
 
@@ -72,6 +72,13 @@ export class WeilSieDichLiebenCard extends LitElement {
 
   public getCardSize(): number {
     return 6;
+  }
+
+  // Sections view. Span the section by default, allow shrinking to half,
+  // and let the departure list set the height: the grid's 8px rows are far
+  // too coarse for a text table that grows with the font size.
+  public getGridOptions(): GridOptions {
+    return { columns: 12, min_columns: 6, rows: 'auto' };
   }
 
   protected render(): TemplateResult {

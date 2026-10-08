@@ -24,3 +24,13 @@ export interface CardConfig {
   hideDepartureCol?: boolean;
   hideRadar?: boolean;
 }
+
+// Mirrors LovelaceGridOptions in the HA frontend (sections view sizing).
+export interface GridOptions {
+  columns?: number | 'full';
+  rows?: number | 'auto';
+  min_columns?: number;
+  max_columns?: number;
+  min_rows?: number;
+  max_rows?: number;
+}
