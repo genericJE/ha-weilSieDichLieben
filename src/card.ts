@@ -1,7 +1,8 @@
-import { LitElement, html, css, type TemplateResult } from 'lit';
+import { LitElement, html, css, type PropertyValues, type TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import './react-bridge';
-import type { CardConfig, GridOptions } from './types';
+import { subscribeRadarTileUrl } from './map-tiles';
+import type { CardConfig, GridOptions, HassConnection, HomeAssistantLike } from './types';
 
 const CARD_VERSION = '1.0.4';
 
@@ -31,8 +32,15 @@ w.customCards.push({
 
 @customElement('weil-sie-dich-lieben-card')
 export class WeilSieDichLiebenCard extends LitElement {
-  @property({ attribute: false }) public hass?: unknown;
+  @property({ attribute: false }) public hass?: HomeAssistantLike;
   @state() private _config?: CardConfig;
+  // Leaflet URL template for the radar map: this instance's tile proxy when
+  // the core has one (2026.10+), otherwise undefined and the upstream falls
+  // back to OpenStreetMap directly.
+  @state() private _tileUrl?: string;
+
+  private _tilesConnection?: HassConnection;
+  private _unsubscribeTiles?: () => void;
 
   public static async getConfigElement(): Promise<HTMLElement> {
     await import('./editor');
@@ -70,6 +78,36 @@ export class WeilSieDichLiebenCard extends LitElement {
     this._config = config;
   }
 
+  public connectedCallback(): void {
+    super.connectedCallback();
+    this._subscribeTiles();
+  }
+
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this._unsubscribeTiles?.();
+    this._unsubscribeTiles = undefined;
+    this._tilesConnection = undefined;
+  }
+
+  protected willUpdate(changed: PropertyValues<this>): void {
+    if (changed.has('hass')) this._subscribeTiles();
+  }
+
+  // HA hands the card a fresh hass object on every state change; only the
+  // connection matters here, so this returns early nearly every time.
+  private _subscribeTiles(): void {
+    const hass = this.hass;
+    if (!hass?.connection || !this.isConnected || hass.connection === this._tilesConnection) {
+      return;
+    }
+    this._unsubscribeTiles?.();
+    this._tilesConnection = hass.connection;
+    this._unsubscribeTiles = subscribeRadarTileUrl(hass, (url) => {
+      this._tileUrl = url;
+    });
+  }
+
   public getCardSize(): number {
     return 6;
   }
@@ -105,6 +143,7 @@ export class WeilSieDichLiebenCard extends LitElement {
           .standardRemarksVisibility=${this._config.standardRemarksVisibility ?? true}
           .hideDepartureCol=${this._config.hideDepartureCol ?? false}
           .hideRadar=${this._config.hideRadar ?? false}
+          .tileUrl=${this._tileUrl}
         ></weil-sie-dich-lieben-departure-display>
       </ha-card>
     `;

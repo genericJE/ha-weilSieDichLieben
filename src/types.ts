@@ -25,6 +25,18 @@ export interface CardConfig {
   hideRadar?: boolean;
 }
 
+// The slice of HA's hass object the card touches.
+export interface HassConnection {
+  sendMessagePromise<T>(message: { type: string } & Record<string, unknown>): Promise<T>;
+  addEventListener(type: 'ready', listener: () => void): void;
+  removeEventListener(type: 'ready', listener: () => void): void;
+}
+
+export interface HomeAssistantLike {
+  connection: HassConnection;
+  auth?: { data?: { hassUrl?: string } };
+}
+
 // Mirrors LovelaceGridOptions in the HA frontend (sections view sizing).
 export interface GridOptions {
   columns?: number | 'full';

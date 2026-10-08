@@ -94,6 +94,7 @@ interface BridgeProps {
   standardRemarksVisibility?: boolean;
   hideDepartureCol?: boolean;
   hideRadar?: boolean;
+  tileUrl?: string;
 }
 
 const normalizeStation = (s: Station, idx: number): Station => ({
@@ -168,6 +169,7 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
               hideDepartureCol={props.hideDepartureCol ?? false}
               hideRadar={props.hideRadar ?? false}
               isMobile={narrow}
+              tileUrl={props.tileUrl}
             />
           </ConfigProvider>
         </StyleProvider>
@@ -187,6 +189,7 @@ if (!customElements.get(REACT_ELEMENT)) {
       standardRemarksVisibility: 'boolean',
       hideDepartureCol: 'boolean',
       hideRadar: 'boolean',
+      tileUrl: 'string',
     },
     shadow: 'open',
   });
