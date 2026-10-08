@@ -24,6 +24,7 @@ declare module '../weilSieDichLieben/src/Components/DepartureDisplay' {
     remarksVisibility?: boolean;
     standardRemarksVisibility?: boolean;
     hideDepartureCol?: boolean;
+    hideRadar?: boolean;
   }>;
   export default DepartureDisplay;
 }

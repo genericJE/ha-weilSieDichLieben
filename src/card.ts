@@ -97,6 +97,7 @@ export class WeilSieDichLiebenCard extends LitElement {
           .remarksVisibility=${this._config.remarksVisibility ?? true}
           .standardRemarksVisibility=${this._config.standardRemarksVisibility ?? true}
           .hideDepartureCol=${this._config.hideDepartureCol ?? false}
+          .hideRadar=${this._config.hideRadar ?? false}
         ></weil-sie-dich-lieben-departure-display>
       </ha-card>
     `;
