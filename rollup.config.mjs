@@ -21,6 +21,39 @@ const isProd = !process.env.ROLLUP_WATCH;
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
 const singletonPackages = Object.keys(pkg.dependencies);
 
+// react-fast-marquee appends its stylesheet to document.head when imported,
+// where nothing inside a shadow root can see it. Blank out that side effect
+// and expose the same CSS as a module, so the bridge can put it in the shadow
+// root next to Leaflet's. Both halves read the package's own dist file, so an
+// upgrade that changes the shape fails the build instead of dropping styles.
+const MARQUEE_ENTRY = 'react-fast-marquee/dist/index.js';
+const MARQUEE_CSS_ID = 'virtual:react-fast-marquee-css';
+const insertStyleCall = /^___\$insertStyle\((".*")\);$/m;
+
+function marqueeCss() {
+  const extract = (code) => {
+    const match = code.match(insertStyleCall);
+    if (!match) throw new Error(`${MARQUEE_ENTRY}: expected a top-level ___$insertStyle("...") call`);
+    return match;
+  };
+  return {
+    name: 'marquee-css',
+    resolveId(id) {
+      return id === MARQUEE_CSS_ID ? `\0${MARQUEE_CSS_ID}` : null;
+    },
+    load(id) {
+      if (id !== `\0${MARQUEE_CSS_ID}`) return null;
+      const entry = readFileSync(new URL(`./node_modules/${MARQUEE_ENTRY}`, import.meta.url), 'utf8');
+      return `export default ${extract(entry)[1]};`;
+    },
+    transform(code, id) {
+      if (!id.replace(/\\/g, '/').endsWith(MARQUEE_ENTRY)) return null;
+      // Same-length blank keeps every other position intact, so no sourcemap is needed.
+      return { code: code.replace(extract(code)[0], (call) => ' '.repeat(call.length)), map: null };
+    },
+  };
+}
+
 export default {
   input: 'src/card.ts',
   output: {
@@ -43,7 +76,9 @@ export default {
       include: ['**/*.ttf', '**/*.woff', '**/*.woff2'],
       limit: 200 * 1024,
     }),
-    postcss({ extensions: ['.css'], inject: true, minimize: isProd }),
+    // Imported stylesheets become strings; the bridge scopes them to the shadow root.
+    postcss({ extensions: ['.css'], inject: false, minimize: isProd }),
+    marqueeCss(),
     babel({
       babelHelpers: 'bundled',
       extensions: ['.js', '.jsx'],

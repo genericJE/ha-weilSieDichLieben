@@ -13,7 +13,15 @@ declare module '*.ttf' {
   export default src;
 }
 
-declare module '*.css';
+declare module '*.css' {
+  const css: string;
+  export default css;
+}
+
+declare module 'virtual:react-fast-marquee-css' {
+  const css: string;
+  export default css;
+}
 
 declare module '../weilSieDichLieben/src/Components/DepartureDisplay' {
   import type { ComponentType } from 'react';

@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import r2wc from '@r2wc/react-to-web-component';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { ConfigProvider } from 'antd';
-import 'leaflet/dist/leaflet.css';
+import leafletCss from 'leaflet/dist/leaflet.css';
+import marqueeCss from 'virtual:react-fast-marquee-css';
 import DepartureDisplay from '../weilSieDichLieben/src/Components/DepartureDisplay';
 import dotMatrixFont from '../weilSieDichLieben/src/assets/fonts/DotMatrix-repaired.ttf';
 
@@ -54,6 +55,21 @@ div[style*="border-radius: 8px"] {
 }
 `;
 
+// Everything the upstream tree needs that antd doesn't scope itself (the
+// StyleProvider below keeps antd's rules inside the shadow root): Leaflet's map
+// chrome, the marquee layout, and the overrides above. One sheet per shadow root.
+// HA re-mounts the card on every view switch, and the React tree mounts into
+// the same shadow root each time, so later mounts find the sheet and leave it.
+const SHADOW_STYLES = `${leafletCss}\n${marqueeCss}\n${SHADOW_OVERRIDES}`;
+
+function ensureShadowStyles(root: ShadowRoot): void {
+  if (root.querySelector('style[data-weil-styles]')) return;
+  const style = document.createElement('style');
+  style.setAttribute('data-weil-styles', '');
+  style.textContent = SHADOW_STYLES;
+  root.appendChild(style);
+}
+
 interface Station {
   id: string;
   value?: string;
@@ -93,39 +109,6 @@ const normalizeStation = (s: Station, idx: number): Station => ({
   instanceId: idx + 1,
 } as Station & { instanceId: number });
 
-function mirrorDocumentStyles(container: ShadowRoot): () => void {
-  const cloneByOrigin = new WeakMap<HTMLStyleElement, HTMLStyleElement>();
-
-  const isAntdStyle = (el: HTMLStyleElement) => el.hasAttribute('data-rc-order');
-  const isOurOverride = (el: HTMLStyleElement) => el.hasAttribute('data-weil-overrides');
-
-  const sync = () => {
-    for (const src of document.head.querySelectorAll('style')) {
-      const styleEl = src as HTMLStyleElement;
-      if (isAntdStyle(styleEl) || isOurOverride(styleEl)) continue;
-      let clone = cloneByOrigin.get(styleEl);
-      if (!clone) {
-        clone = document.createElement('style');
-        clone.setAttribute('data-mirror-from', 'document.head');
-        container.appendChild(clone);
-        cloneByOrigin.set(styleEl, clone);
-      }
-      if (clone.textContent !== styleEl.textContent) {
-        clone.textContent = styleEl.textContent;
-      }
-    }
-  };
-
-  sync();
-  const observer = new MutationObserver(sync);
-  observer.observe(document.head, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-  });
-  return () => observer.disconnect();
-}
-
 const DepartureDisplayWrapper = (props: BridgeProps) => {
   const probeRef = useRef<HTMLDivElement>(null);
   const portalRef = useRef<HTMLDivElement>(null);
@@ -136,20 +119,10 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
     if (container || !probeRef.current) return;
     const root = probeRef.current.getRootNode();
     if (root instanceof ShadowRoot) {
-      if (!root.querySelector('style[data-weil-overrides]')) {
-        const style = document.createElement('style');
-        style.setAttribute('data-weil-overrides', '');
-        style.textContent = SHADOW_OVERRIDES;
-        root.appendChild(style);
-      }
+      ensureShadowStyles(root);
       setContainer(root);
     }
   });
-
-  useEffect(() => {
-    if (!container) return;
-    return mirrorDocumentStyles(container);
-  }, [container]);
 
   const stations = Array.isArray(props.selectedStations)
     ? props.selectedStations.map(normalizeStation)
