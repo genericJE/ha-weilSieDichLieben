@@ -4,7 +4,7 @@ import './react-bridge';
 import { subscribeRadarTileUrl } from './map-tiles';
 import type { CardConfig, GridOptions, HassConnection, HomeAssistantLike } from './types';
 
-const CARD_VERSION = '1.0.4';
+const CARD_VERSION = '1.1.0';
 
 console.info(
   `%c WEIL-SIE-DICH-LIEBEN-CARD %c v${CARD_VERSION} `,
