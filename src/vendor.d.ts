@@ -22,17 +22,3 @@ declare module 'virtual:react-fast-marquee-css' {
   const css: string;
   export default css;
 }
-
-declare module '../weilSieDichLieben/src/Components/DepartureDisplay' {
-  import type { ComponentType } from 'react';
-  const DepartureDisplay: ComponentType<{
-    selectedStations: unknown[];
-    fontSize?: number;
-    language?: string;
-    remarksVisibility?: boolean;
-    standardRemarksVisibility?: boolean;
-    hideDepartureCol?: boolean;
-    hideRadar?: boolean;
-  }>;
-  export default DepartureDisplay;
-}

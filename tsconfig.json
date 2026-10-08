@@ -4,6 +4,9 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
+    // The upstream submodule is plain JS; load it so its exports have shapes
+    // instead of hand-written (and relative, hence ignored) ambient modules.
+    "allowJs": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "strict": true,

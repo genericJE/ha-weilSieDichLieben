@@ -69,7 +69,10 @@ export default {
         'process.env.NODE_ENV': JSON.stringify('production'),
       },
     }),
-    typescript({ tsconfig: './tsconfig.json' }),
+    // allowJs is for tsc, so it can follow imports into the submodule. The build
+    // leaves the submodule to babel; with allowJs on, the plugin stops emitting
+    // the .ts sources altogether.
+    typescript({ tsconfig: './tsconfig.json', allowJs: false }),
     json(),
     image(),
     url({
