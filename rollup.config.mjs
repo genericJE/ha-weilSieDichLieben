@@ -8,8 +8,18 @@ import postcss from 'rollup-plugin-postcss';
 import image from '@rollup/plugin-image';
 import json from '@rollup/plugin-json';
 import url from '@rollup/plugin-url';
+import { readFileSync } from 'node:fs';
 
 const isProd = !process.env.ROLLUP_WATCH;
+
+// The upstream submodule imports the same packages this repo does. When it has
+// a node_modules/ of its own (left behind by running its dev server), rollup
+// would bundle a second copy of each: two Reacts means the hooks of one run
+// inside the renderer of the other and every station render dies with
+// 'Cannot read properties of null (reading useState)'. Pin every direct
+// dependency to this repo's install instead.
+const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
+const singletonPackages = Object.keys(pkg.dependencies);
 
 export default {
   input: 'src/card.ts',
@@ -46,6 +56,7 @@ export default {
     resolve({
       browser: true,
       extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
+      dedupe: singletonPackages,
     }),
     commonjs({ include: ['node_modules/**', 'weilSieDichLieben/**'] }),
     isProd && terser(),
