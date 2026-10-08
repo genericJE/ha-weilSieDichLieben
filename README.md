@@ -88,11 +88,13 @@ Global options, all optional:
 | `standardRemarksVisibility` | `true` | Ask the BVG API for its standard remarks too |
 | `hideDepartureCol` | `false` | Hide the "Abfahrt von" column |
 | `hideRadar` | `false` | Hide the vehicle radar icons and popups |
+| `layout` | `auto` | `auto` picks the table by card width; `wide` or `compact` pins one |
 
 ### Layout
 
-The card switches to the upstream's compact layout whenever it is narrower
-than 576 px, whatever the screen size, so it also works in half a section.
+By default the card switches to the upstream's compact table whenever it is
+narrower than 576 px, whatever the screen size, so it also works in half a
+section. Set `layout: wide` or `layout: compact` to pin one.
 
 ### Map tiles
 

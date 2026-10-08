@@ -95,6 +95,7 @@ interface BridgeProps {
   hideDepartureCol?: boolean;
   hideRadar?: boolean;
   tileUrl?: string;
+  layout?: string;
 }
 
 const normalizeStation = (s: Station, idx: number): Station => ({
@@ -142,6 +143,9 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
     return () => observer.disconnect();
   }, []);
 
+  // 'wide' and 'compact' pin the table; 'auto' (the default) follows the width.
+  const isMobile = props.layout === 'compact' ? true : props.layout === 'wide' ? false : narrow;
+
   const stations = Array.isArray(props.selectedStations)
     ? props.selectedStations.map(normalizeStation)
     : [];
@@ -168,7 +172,7 @@ const DepartureDisplayWrapper = (props: BridgeProps) => {
               standardRemarksVisibility={props.standardRemarksVisibility ?? true}
               hideDepartureCol={props.hideDepartureCol ?? false}
               hideRadar={props.hideRadar ?? false}
-              isMobile={narrow}
+              isMobile={isMobile}
               tileUrl={props.tileUrl}
             />
           </ConfigProvider>
@@ -190,6 +194,7 @@ if (!customElements.get(REACT_ELEMENT)) {
       hideDepartureCol: 'boolean',
       hideRadar: 'boolean',
       tileUrl: 'string',
+      layout: 'string',
     },
     shadow: 'open',
   });

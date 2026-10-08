@@ -23,6 +23,8 @@ export interface CardConfig {
   autoHide?: boolean;
   hideDepartureCol?: boolean;
   hideRadar?: boolean;
+  // auto: compact table below the upstream breakpoint of card width.
+  layout?: 'auto' | 'wide' | 'compact';
 }
 
 // The slice of HA's hass object the card touches.

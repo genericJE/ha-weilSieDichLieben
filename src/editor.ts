@@ -124,6 +124,11 @@ export class WeilSieDichLiebenEditor extends LitElement {
               { value: 'de', label: 'Deutsch' },
               { value: 'en', label: 'English' },
             ])}
+            ${this._renderSelect('Layout', 'layout', 'auto', [
+              { value: 'auto', label: 'Automatic (by card width)' },
+              { value: 'wide', label: 'Wide table' },
+              { value: 'compact', label: 'Compact table' },
+            ])}
           </div>
         </section>
       </div>

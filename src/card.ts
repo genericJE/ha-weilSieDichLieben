@@ -143,6 +143,7 @@ export class WeilSieDichLiebenCard extends LitElement {
           .standardRemarksVisibility=${this._config.standardRemarksVisibility ?? true}
           .hideDepartureCol=${this._config.hideDepartureCol ?? false}
           .hideRadar=${this._config.hideRadar ?? false}
+          .layout=${this._config.layout ?? 'auto'}
           .tileUrl=${this._tileUrl}
         ></weil-sie-dich-lieben-departure-display>
       </ha-card>
