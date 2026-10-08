@@ -1,3 +1,4 @@
 [submodule "weilSieDichLieben"]
 	path = weilSieDichLieben
 	url = https://github.com/genericJE/weilSieDichLieben.git
+	branch = ha-card-integration
