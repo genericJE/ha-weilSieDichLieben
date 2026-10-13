@@ -6,7 +6,7 @@ import leafletCss from 'leaflet/dist/leaflet.css';
 import marqueeCss from 'virtual:react-fast-marquee-css';
 import DepartureDisplay from '../weilSieDichLieben/src/Components/DepartureDisplay';
 import { MOBILE_BREAKPOINT } from '../weilSieDichLieben/src/hooks/useIsMobile';
-import dotMatrixFont from '../weilSieDichLieben/src/assets/fonts/DotMatrix-repaired.ttf';
+import dotMatrixFont from '../weilSieDichLieben/src/assets/fonts/DotMatrix.ttf';
 
 export const REACT_ELEMENT = 'weil-sie-dich-lieben-departure-display';
 
